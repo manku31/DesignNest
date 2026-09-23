@@ -1,0 +1,590 @@
+/* Immersive 360° studio: the sphere stays interactive behind the glass chrome. */
+.tour-page {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  overflow: hidden;
+  background: #2d241b;
+}
+.tour-page .panorama-surface {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #2d241b;
+  touch-action: none;
+}
+.tour-page .panorama-surface:focus-visible {
+  outline: 2px solid #dbc296;
+  outline-offset: -3px;
+}
+.tour-page .pnlm-load-box,
+.tour-page .pnlm-error-msg {
+  display: none !important;
+}
+.tour-top-shade,
+.tour-bottom-shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.tour-top-shade {
+  top: 0;
+  height: 170px;
+  background: linear-gradient(#110e0ba6, #110e0b2b 68%, transparent);
+}
+.tour-bottom-shade {
+  bottom: 0;
+  height: 430px;
+  background: linear-gradient(
+    transparent,
+    #17120cc7 26%,
+    #16110bf0 59%,
+    #13100dfc
+  );
+}
+.tour-glass {
+  background: #31281d52;
+  border: 1px solid #ffeed323;
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px #fff8e909;
+}
+.tour-header {
+  position: absolute;
+  z-index: 4;
+  top: calc(23px + env(safe-area-inset-top));
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #f4eadb;
+}
+.tour-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #f4e4cb;
+}
+.tour-brand > span {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  font-weight: 450;
+}
+.tour-brand small {
+  display: block;
+  margin-top: 5px;
+  font-size: 6px;
+  letter-spacing: 2.4px;
+  color: #d2ba98;
+}
+.tour-badges {
+  position: absolute;
+  top: calc(88px + env(safe-area-inset-top));
+  left: 23px;
+  right: 23px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  pointer-events: none;
+}
+.tour-badges > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 7px;
+  letter-spacing: 1.4px;
+  color: #e6d9c6;
+}
+.tour-badges > span:last-child {
+  font-size: 8px;
+  letter-spacing: 0.2px;
+  color: #e6d9c6c9;
+}
+.tour-badges .tiny-dot {
+  color: #d5c3a0;
+  box-shadow: 0 0 9px #ffe5b466;
+}
+.tour-zoom-controls {
+  position: absolute;
+  z-index: 3;
+  right: 20px;
+  top: 34%;
+  padding: 3px;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tour-zoom-controls .icon-button {
+  background: transparent;
+  border: 0;
+}
+.tour-zoom-divider {
+  width: 14px;
+  height: 1px;
+  background: #f0debd21;
+}
+.tour-drag-hint {
+  position: absolute;
+  z-index: 2;
+  top: 37%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 23px;
+  border: 1px solid #ffffff20;
+  border-radius: 20px;
+  background: #30271c4d;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px #0000000d;
+}
+.tour-drag-hint > svg {
+  color: #ead8b7;
+  margin-bottom: 11px;
+}
+.tour-drag-hint > span {
+  font-size: 11px;
+  font-weight: 450;
+  color: #f7eddc;
+}
+.tour-drag-hint > small {
+  margin-top: 6px;
+  font-size: 8px;
+  color: #e5d3b5b5;
+}
+.tour-bottom-panel {
+  position: absolute;
+  z-index: 3;
+  left: 23px;
+  right: 23px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+}
+.tour-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.tour-heading .eyebrow {
+  color: #d6bd98;
+  font-size: 7px;
+  letter-spacing: 1.9px;
+}
+.tour-heading h1 {
+  font-size: 35px;
+  line-height: 1.2;
+  font-weight: 450;
+  letter-spacing: -1.3px;
+  margin-top: 10px;
+}
+.tour-heading h1 > span {
+  color: #c8b08a;
+}
+.tour-heading > div:first-child > p:last-child {
+  font-size: 10px;
+  color: #cbbba5;
+  margin-top: 8px;
+}
+.tour-compass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #d9c19a;
+  padding: 9px;
+}
+.tour-compass svg {
+  transform: rotate(var(--view-angle));
+}
+.tour-compass output {
+  font-size: 8px;
+  color: #d3bf9f;
+  font-variant-numeric: tabular-nums;
+  min-width: 30px;
+  text-align: center;
+}
+.tour-playback {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 23px;
+}
+.tour-play-button {
+  min-height: 51px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: #d5be98;
+  color: #312619;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.tour-play-button:hover {
+  background: #e6d2af;
+}
+.tour-play-button:active {
+  transform: scale(0.97);
+}
+.tour-play-button > span {
+  font-size: 12px;
+  font-weight: 500;
+}
+.tour-play-button .tour-play-detail {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 400;
+  color: #7c6545;
+}
+.tour-speed {
+  min-width: 47px;
+  height: 47px;
+  border-radius: 50%;
+  font-size: 10px;
+  color: #e6d6bd;
+}
+.tour-playback > .icon-button {
+  width: 47px;
+  height: 47px;
+  color: #e6d6bd;
+}
+.tour-rooms-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #fff1d713;
+  padding-top: 19px;
+  margin-top: 21px;
+  margin-bottom: 12px;
+}
+.tour-rooms-heading > span:first-child {
+  font-size: 6px;
+  letter-spacing: 1.6px;
+  color: #bca78a;
+}
+.tour-rooms-heading > span:last-child {
+  font-size: 8px;
+  color: #d1b999;
+  font-variant-numeric: tabular-nums;
+}
+.tour-rooms-heading i {
+  font-style: normal;
+  color: #7a6b57;
+  margin-left: 3px;
+}
+.tour-room-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+.tour-room-choice {
+  min-height: 74px;
+  position: relative;
+  border: 1px solid #ffffff16;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #3c3225;
+  transition: border-color 0.2s;
+}
+.tour-room-choice > .photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.57) saturate(0.75);
+}
+.tour-room-choice > span {
+  position: absolute;
+  bottom: 9px;
+  left: 10px;
+  right: 3px;
+  z-index: 1;
+  font-size: 8px;
+  color: #e5d5bf;
+}
+.tour-room-choice::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 20%, #191109b0);
+}
+.tour-room-choice.selected {
+  border-color: #d7bd90;
+}
+.tour-room-choice.selected > .photo {
+  filter: brightness(0.84) saturate(0.8);
+}
+.tour-room-choice > i {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #49351a;
+  background: #dcc298;
+}
+.tour-instructions {
+  margin-top: 15px;
+  color: #94816a;
+  text-align: center;
+  font-size: 7px;
+  letter-spacing: 0.4px;
+}
+.tour-status {
+  position: absolute;
+  z-index: 5;
+  inset: 130px 24px 355px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #d9c09a;
+}
+.tour-status h2 {
+  font-size: 21px;
+  line-height: 1.4;
+  font-weight: 400;
+  margin-top: 18px;
+  letter-spacing: -0.5px;
+}
+.tour-status p {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #b9a78d;
+  line-height: 1.8;
+  max-width: 280px;
+}
+.tour-loading-orbit {
+  width: 64px;
+  height: 64px;
+  border: 1px solid #c8b08a26;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tour-loading-orbit svg {
+  animation: panorama-spin 1.6s linear infinite;
+}
+.tour-error {
+  inset: 120px 28px 330px;
+  padding: 10px;
+}
+.tour-error .primary-button {
+  margin-top: 17px;
+  font-size: 11px;
+}
+.tour-error .secondary-button {
+  margin-top: 9px;
+  font-size: 10px;
+}
+.tour-info-symbol {
+  display: flex;
+  justify-content: center;
+  padding: 13px 0 26px;
+  color: #c8b08a;
+}
+.tour-route-loading {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  color: #c8b08a;
+  font-size: 13px;
+  background: #211b14;
+}
+.tour-page:fullscreen {
+  width: 100vw;
+  height: 100dvh;
+}
+.app-frame:has(.tour-page.is-expanded) {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  min-height: 0;
+  border-radius: 0;
+  border: 0;
+}
+.tour-page.is-expanded .tour-bottom-panel,
+.tour-page:fullscreen .tour-bottom-panel {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tour-page.is-expanded .tour-status,
+.tour-page:fullscreen .tour-status {
+  max-width: 420px;
+  margin: auto;
+}
+
+/* Entrances to the studio, kept in the app's existing visual language. */
+.room-tour-link {
+  position: absolute;
+  top: 80px;
+  right: 22px;
+  min-height: 44px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  background: #241c124d;
+  border: 1px solid #fff6e235;
+  backdrop-filter: blur(14px);
+  color: #f1e1c7;
+  font-size: 9px;
+  transition: background 0.2s;
+}
+.room-tour-link:hover {
+  background: #5f4b32a6;
+}
+.tour-discovery-card {
+  display: block;
+  position: relative;
+  min-height: 211px;
+  border-radius: 23px;
+  overflow: hidden;
+  margin-top: 26px;
+  padding: 21px;
+  border: 1px solid #d5b98b20;
+  transition: transform 0.2s;
+}
+.tour-discovery-card > .photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 52%;
+  filter: brightness(0.72) saturate(0.65);
+}
+.tour-discovery-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, #17110be8, #17110b68 72%, #17110b35);
+}
+.tour-discovery-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #dfcaa9;
+  font-size: 7px;
+  letter-spacing: 1.6px;
+}
+.tour-discovery-card > div:not(.tour-discovery-shade) {
+  position: relative;
+  margin-top: 19px;
+}
+.tour-discovery-card h2 {
+  max-width: 200px;
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 450;
+  letter-spacing: -0.8px;
+}
+.tour-discovery-card h2 > span {
+  color: #c8b08a;
+}
+.tour-discovery-card p {
+  font-size: 9px;
+  color: #bba991;
+  margin-top: 9px;
+}
+.tour-discovery-action {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #d8c1a0;
+  font-size: 10px;
+  margin-top: 19px;
+}
+.tour-discovery-action > span {
+  width: 31px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dcc49e44;
+  background: #d8bf9419;
+  border-radius: 50%;
+}
+
+@media (max-width: 375px) {
+  .tour-bottom-panel {
+    left: 19px;
+    right: 19px;
+  }
+  .tour-heading h1 {
+    font-size: 31px;
+  }
+  .tour-play-button {
+    padding: 0 14px;
+  }
+  .tour-playback {
+    gap: 7px;
+  }
+}
+@media (max-height: 700px) {
+  .tour-page {
+    min-height: 500px;
+  }
+  .tour-header {
+    top: 13px;
+  }
+  .tour-badges {
+    top: 72px;
+  }
+  .tour-heading h1 {
+    font-size: 27px;
+  }
+  .tour-playback {
+    margin-top: 15px;
+  }
+  .tour-rooms-heading {
+    padding-top: 12px;
+    margin-top: 13px;
+    margin-bottom: 9px;
+  }
+  .tour-room-choice {
+    min-height: 60px;
+  }
+  .tour-instructions {
+    margin-top: 9px;
+  }
+  .tour-drag-hint {
+    top: 30%;
+    padding: 12px 19px;
+  }
+  .tour-zoom-controls {
+    top: 26%;
+  }
+}
+@keyframes panorama-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
