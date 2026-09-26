@@ -25,7 +25,7 @@ import Modal from "../components/Modal";
 import Pendant from "../components/Pendant";
 import ProjectCard from "../components/ProjectCard";
 import SectionHeader from "../components/SectionHeader";
-import SpaceTile from "../components/SpaceTile";
+import SpaceTile from "../components/SpaceTile"; 
 
 export default function Home() {
   const {
