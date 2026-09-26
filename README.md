@@ -55,7 +55,7 @@ See [the generation notes and final prompts](docs/panorama-generation.md) for as
 - Local generated 360° room tours with mouse, touch, keyboard, fullscreen, playback speed, and loading/retry states.
 - Native dialogs with focus management and Escape dismissal, reduced-motion support, and iOS safe-area spacing.
 
-This is a **static UI demo**. All state stays in memory for the current session and resets on refresh. The 3D Visualizer is a labeled photo/style preview; it does not render an actual 3D scene. Light controls do not connect to physical devices. Profile stats use sample totals, adjusted when you add rooms or change favorites.
+The app uses an Express API to load and save its state in `data/designnest.json`, with uploaded images in `data/uploads/`. Back up this directory to preserve changes. The 3D Visualizer is a labeled photo/style preview; it does not render an actual 3D scene. Light controls do not connect to physical devices. Profile stats use sample totals, adjusted when you add rooms or change favorites.
 
 ## Project structure
 
@@ -96,9 +96,33 @@ Format source with `npm run format`.
 
 ## Production
 
+To serve the complete app with its API on a Node.js host with persistent disk storage:
+
 ```bash
 npm run build
-npm run preview
+npm start
 ```
 
-Deploy the `dist/` directory to a static host. Configure all non-asset requests to serve `index.html` so React Router deep links work. A Netlify/Cloudflare Pages-compatible `public/_redirects` file is included. No backend, API keys, or environment variables are required.
+The server listens on port 3000 by default. Set `API_PORT` to override the port and `DESIGNNEST_DATA_DIR` to choose a persistent data directory. `npm run preview` serves only the Vite frontend; it does not start the API.
+
+### Cloudflare Workers frontend deployment
+
+Use these Workers Builds settings with the checked-in `wrangler.jsonc`:
+
+| Setting | Value |
+| --- | --- |
+| Root directory | `/` (repository root) |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Worker name | `designnest` |
+
+Wrangler uploads `dist/` and uses `assets.not_found_handling: "single-page-application"` for React Router deep links such as `/home` and `/tour/living-room`. Do not add the catch-all `/* /index.html 200` rule to `public/_redirects`: Cloudflare rejects it as an infinite redirect loop. The explicit configuration also avoids Wrangler automatically setting up the project and rebuilding it during deployment. No frontend build variables are required for this configuration.
+
+Verify the frontend deployment configuration without publishing:
+
+```bash
+npm run build
+npx wrangler deploy --dry-run
+```
+
+**Backend requirement:** this configuration deploys the frontend assets only. The current app requires `/api/state`, `/api/actions`, `/api/uploads`, and `/uploads/*` on the same origin. Without them, the app shows a connection error. The Express server, its filesystem persistence, and image processing are not included in `dist/`. To run the complete app on Cloudflare, adapt the API and storage to Workers, or route those paths to a separately hosted Node.js backend. The Vite development proxy is not used in production.

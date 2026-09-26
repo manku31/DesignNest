@@ -23,6 +23,9 @@
 /test-results
 /playwright-report
 
+# Cloudflare local state and generated deployment configuration
+/.wrangler/
+
 # misc
 .DS_Store
 *.pem
